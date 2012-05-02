@@ -324,10 +324,11 @@ class with_stubs(object):
 
 
 class HandlerTestCase(GaeTestCase):
-    handler=None
-
     request=None
 
+    handler=None # override in descendent classes
+
+    application=None # override in descendent classes
 
     def _request(self, path, method=None, data={}, **kwargs):
         request = webapp.Request.blank(path, **kwargs)
@@ -366,5 +367,5 @@ class HandlerTestCase(GaeTestCase):
     def route(self, path=None, method=None, **kwargs):
         self.request = self._request(path, method=method, data=kwargs)
 
-        application.router.dispatch(self.request, self.response)
+        self.application.router.dispatch(self.request, self.response)
 
