@@ -274,7 +274,7 @@ class GaeTestCase(unittest2.TestCase):
 
 
     def init_stubs(self, *initializers):
-        [ getattr(self.testbed, i)() for i in initializers) ]
+        [ getattr(self.testbed, i)() for i in initializers ]
 
 
     def tearDown(self):
