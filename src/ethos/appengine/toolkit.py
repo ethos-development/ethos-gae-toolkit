@@ -262,16 +262,19 @@ import unittest2
 
 
 class GaeTestCase(unittest2.TestCase):
-    fixture = None
+    with_stubs=()
+
+    fixture=None
 
     def setUp(self):
         self.testbed = testbed.Testbed()
         self.testbed.activate()
 
+        self.init_stubs(*self.with_stubs)
 
-    def with_stubs(self, *initializers):
-        for initializer in initializers:
-            getattr(self.testbed, initializer)()
+
+    def init_stubs(self, *initializers):
+        [ getattr(self.testbed, i)() for i in initializers) ]
 
 
     def tearDown(self):
@@ -283,6 +286,18 @@ class with_stubs(object):
     The `with_stubs()` decorator is expected to be used with test methods of
     `GaeTestCase` and will initialize the named service stubs provided by the
     `GaeTestCase.testbed` instance.
+
+    >>> class SomeTest(GaeTestCase):
+    ...   with_stubs=('init_datastore_v3_stub',) # always available
+    ...   def test_something(self):
+    ...     pass # the datastore can be used in here...
+    ...   @with_stubs('init_memcache_stub')
+    ...   def test_something(self):
+    ...     pass # and the memcache service AND datastore are available here...
+    ...
+
+    Use this decorator when you need a stub for a specific test but not for ALL
+    tests, set `GaeTestCase.with_stubs` when you ALWAYS need a stub.
     '''
 
     initializers = ()
@@ -300,7 +315,7 @@ class with_stubs(object):
     def __call__(self, method):
         @functools.wraps(method)
         def wrapper(test, *args, **kwargs):
-            test.with_stubs(self.initializers)
+            test.init_stubs(*self.initializers)
 
             return method(test, *args, **kwargs)
 
