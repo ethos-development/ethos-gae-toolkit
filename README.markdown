@@ -26,7 +26,7 @@ Enter and activate the `virtualenv`:
 $> cd path/to/your/project && source bin/activate
 ```
 
-Install it locally</sup>[1](#fn1)</sup>
+Install it locally<sup>[1](#fn1)</sup>
 
 ```
 $> pip install -e git+https://github.com/al-the-x/ethos-gae-toolkit#egg=ehos-gae-toolkit
@@ -64,13 +64,13 @@ class SomeTest(toolkit.GaeTestCase):
 
 <dl>
 <dt> <a name="fn1">1</a> </dt>
-<dd> This also installs `Mako`[1][1], `PyHAML`[2][2], and `WTForms`[3][3], too. </dd>
+<dd> This also installs [`Mako`][], [`PyHAML`][], and [`WTForms`][], too. </dd>
 <dt> <a name="fn2">2</a> </dt>
 <dd> Assuming you're using the Python 2.7 SDK. Change the path for the 2.5 SDK. </dd>
 <dt> <a name="fn3">3</a> </dt>
 <dd> Do yourself a favor and make one `dispatch.py` that serves most if not all of your URLs to make this easy. </dd>
 </dl>
 
-[1]: http://www.makotemplates.org/
-[2]: https://github.com/mikeboers/PyHAML/README.md
-[3]: http://wtforms.simplecodes.com/docs/dev/crash_course.html
+[Mako]: http://www.makotemplates.org/
+[PyHAML]: https://github.com/mikeboers/PyHAML/README.md
+[WTForms]: http://wtforms.simplecodes.com/docs/dev/crash_course.html
