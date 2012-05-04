@@ -62,14 +62,10 @@ class SomeTest(toolkit.GaeTestCase):
 
 ### Footnotes:
 
+* <a name="fn1">1</a> -- This also installs [Mako][1], [PyHAML][2], and [WTForms][3], too.
 <dl>
-<dt> <a name="fn1">1</a> </dt>
-<dd> This also installs [`Mako`][1], [`PyHAML`][2], and [`WTForms`][3], too. </dd>
-<dt> <a name="fn2">2</a> </dt>
-<dd> Assuming you're using the Python 2.7 SDK. Change the path for the 2.5 SDK. </dd>
-<dt> <a name="fn3">3</a> </dt>
-<dd> Do yourself a favor and make one `dispatch.py` that serves most if not all of your URLs to make this easy. </dd>
-</dl>
+* <a name="fn2">2</a> -- Assuming you're using the Python 2.7 SDK. Change the path for the 2.5 SDK.
+* <a name="fn3">3</a> -- Do yourself a favor and make one `dispatch.py` that serves most if not all of your URLs to make this easy.
 
 [1]: http://www.makotemplates.org/
 [2]: https://github.com/mikeboers/PyHAML/README.md
