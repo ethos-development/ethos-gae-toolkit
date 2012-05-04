@@ -14,28 +14,62 @@ I recommend using `virtualenv` to manage your environment and track dependencies
 Since Google App Engine is expecting (read: REQUIRES) just a big, messy bucket of
 code -- libraries, dependencies and all -- here's how I keep things pretty:
 
-* Create a `virtualenv` for your project:
-    * `virtualenv path/to/your/project`
-* Enter and activate the `virtualenv`:
-    * `cd path/to/your/project && source bin/activate`
-* Install it locally:
-    * `pip install -e git+https://github.com/al-the-x/ethos-gae-toolkit#egg=ehos-gae-toolkit`
-    * This also installs `Mako`[1][1], `PyHAML`[2][2], and `WTForms`[3][3], too.
-* Put all your application code somewhere neat:
-    * I recommend: `pushd app && cd app && touch app.yaml && popd`
-    * Fill out your `app.yaml` file accordingly...
-* Put a link to your pip-installed libraries somewhere convenient:
-    * `pushd app/ && ln -s ../lib/python2.7/site-packages lib && popd`
-    * Assuming you're using the Python 2.7 SDK.
-* In every entry-point for your application:
-    * `import sys; sys.path = ['lib'] + sys.path`
-    * Do yourself a favor and make one `dispatch.py` that serves most if not all URLs...
-* Now, when you want to use something in the toolkit:
-    ```
-    import ethos.appengine.toolkit as toolkit
+Create a `virtualenv` for your project:
 
-    class SomeTest(toolkit.GaeTestCase):
-    ```
+```
+$> virtualenv path/to/your/project
+```
+
+Enter and activate the `virtualenv`:
+
+```
+$> cd path/to/your/project && source bin/activate
+```
+
+Install it locally</sup>[1](#fn1)</sup>
+
+```
+$> pip install -e git+https://github.com/al-the-x/ethos-gae-toolkit#egg=ehos-gae-toolkit
+```
+
+Put all your application code somewhere neat, I recommend:
+
+```
+$> pushd app && cd app && touch app.yaml && popd
+```
+
+Put a link to your pip-installed libraries somewhere convenient<sup>[2](#fn2)</sup>:
+
+```
+$> pushd app/ && ln -s ../lib/python2.7/site-packages lib && popd
+```
+
+In every entry-point for your application, make the `lib/` path available for import<sup>[3](#fn3)</sup>:
+
+```
+import sys
+
+sys.path = ['lib'] + sys.path
+```
+
+Now, when you want to use something in the toolkit:
+
+```
+import ethos.appengine.toolkit as toolkit
+
+class SomeTest(toolkit.GaeTestCase):
+```
+
+### Footnotes:
+
+<dl>
+<dt> <a name="fn1">1</a> </dt>
+<dd> This also installs `Mako`[1][1], `PyHAML`[2][2], and `WTForms`[3][3], too. </dd>
+<dt> <a name="fn2">2</a> </dt>
+<dd> Assuming you're using the Python 2.7 SDK. Change the path for the 2.5 SDK. </dd>
+<dt> <a name="fn3">3</a> </dt>
+<dd> Do yourself a favor and make one `dispatch.py` that serves most if not all of your URLs to make this easy. </dd>
+</dl>
 
 [1]: http://www.makotemplates.org/
 [2]: https://github.com/mikeboers/PyHAML/README.md
