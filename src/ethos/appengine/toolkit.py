@@ -259,8 +259,8 @@ render_default.__doc__ = '''
 
 
 ##--- Testing Tools --##
-from google.appengine.ext import testbed, webapp
-import unittest2
+from google.appengine.ext import testbed
+import webapp2, unittest2
 
 
 class GaeTestCase(unittest2.TestCase):
@@ -326,16 +326,28 @@ class with_stubs(object):
 
 
 class HandlerTestCase(GaeTestCase):
-    request=None
+    request=response=None
 
     handler=None # override in descendent classes
 
     application=None # override in descendent classes
 
+    def _url_for(self, name, **kwargs):
+        ''' Internal implementation used by `RequestHandlerTestCase.url_for()` '''
+        return self.handler.uri_for(name, **kwargs)
+
+
+    def url_for(self, name, **kwargs):
+        ''' The "url_for" method is safe to override in decendent classes. '''
+        return self._url_for(name, **kwargs)
+
+
     def _request(self, path, method=None, data={}, **kwargs):
-        request = webapp.Request.blank(path, **kwargs)
+        request = webapp2.Request.blank(path, **kwargs)
 
         request.method = method = method or 'GET'
+
+        request.app = self.application
 
         if data:
             if method == 'GET':
@@ -348,26 +360,14 @@ class HandlerTestCase(GaeTestCase):
 
 
     def _response(self, *args, **kwargs):
-        ''' Internal implementation used by `RequestHandlerTestCase.response` '''
-        return webapp.Response(*args, **kwargs)
-
-    @webapp2.cached_property
-    def response(self):
-        return self._response()
-
-
-    def _url_for(self, name, **kwargs):
-        ''' Internal implementation used by `RequestHandlerTestCase.url_for()` '''
-        return self.handler.uri_for(name, **kwargs)
-
-
-    def url_for(self, name, **kwargs):
-        ''' The "url_for" method is safe to override in decendent classes. '''
-        return self._url_for(name, **kwargs)
+        ''' Returns a new instance of `webapp2.Response()` for use by `HandlerTestCase.route()` '''
+        return webapp2.Response(*args, **kwargs)
 
 
     def route(self, path=None, method=None, **kwargs):
         self.request = self._request(path, method=method, data=kwargs)
+
+        self.response = self._response()
 
         self.application.router.dispatch(self.request, self.response)
 
