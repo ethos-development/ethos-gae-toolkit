@@ -1,5 +1,5 @@
-import sys, functools, mako.lookup, haml
-import webapp2
+import sys, itertools, functools, mako.lookup, haml, webapp2
+
 
 def _module_for(name):
     '''
@@ -35,7 +35,9 @@ def application(*apps):
     Python modules or packages that contain a `URLS` member listing valid route
     specifications per the docs for `webapp2.Router()`.
     '''
-    return webapp2.WSGIApplication( sum(( _module_for(name).URLS for name in apps )) )
+    return webapp2.WSGIApplication(itertools.chain(
+        *(_module_for(name).URLS for name in apps)
+    ))
 
 
 
@@ -142,11 +144,11 @@ class RequestHandler(webapp2.RequestHandler):
 
     @webapp2.cached_property
     def templates(self):
-        mako.lookup.TemplateLookup([ 'templates' ], preprocessor = haml.preprocessor)
+        return mako.lookup.TemplateLookup([ 'templates' ], preprocessor = haml.preprocessor)
 
 
     def template(self, name=None):
-        self.templates.get_template(name or self.template_name)
+        return self.templates.get_template(name or self.template_name)
 
 
     @webapp2.cached_property
